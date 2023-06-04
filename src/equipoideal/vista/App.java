@@ -128,7 +128,7 @@ public class App {
 		btnAgregarIncompat.setBounds(175, 201, 133, 23);
 		btnAgregarIncompat.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				imprimirEmpleados();
+				agregarIncompatibilidades();
 			}
 		});
 		frmTrabajoPracticoIii.getContentPane().add(btnAgregarIncompat);
@@ -187,57 +187,43 @@ public class App {
 	}
 
 	private void agregarEmpleado() { // --> deberia devolver un boolean¿? por si no se puede, mostrar un aviso
-		Scanner lector = new Scanner(System.in);
-
-		System.out.println("Ingrese el nombre: ");
-		String nombre = lector.next();
-
-		System.out.println("Ingrese su rol: ");
-		String rol = lector.next();
-
-		System.out.println("Ingrese su calificacion: ");
-		int calificacion = lector.nextInt();
-
-		// por alguna razon no me deja cerrar el lector
-//		lector.close();
-
-		controlador.agregarEmpleado(new Empleado(nombre.toUpperCase(), rol, calificacion));
+		controlador.agregarEmpleado();
 		imprimirEmpleados();
 	}
 
 	private void quitarEmpleado() { // --> deberia devolver un boolean¿? por si no se puede, mostrar un aviso
-		Scanner lector = new Scanner(System.in);
-
-		System.out.println("Ingrese el nombre: ");
-		String nombre = lector.next();
-//		lector.close();
-
-		controlador.quitarEmpleado(nombre);
-
+		controlador.quitarEmpleado();
 		imprimirEmpleados();
 	}
 
 	private void verIncompatibilidades() {
 		imprimirEmpleados();
 		System.out.println("::::: incompatibilidades :::::");
-		imprimirIncompatibilidades(controlador.obtenerIncompatibilidades());
+		imprimirIncompatibilidades();
+		// controlador.obtenerIncompatibilidades()
 	}
-
+	
+	private void agregarIncompatibilidades() {
+		imprimirIncompatibilidades();
+		controlador.agregarIncompatibilidades();		
+	}
+	
 	private void imprimirEmpleados() {
 		System.out.println(controlador.verEmpleados().toString());
 	}
 
-	private void imprimirIncompatibilidades(List lista) {
+	private void imprimirIncompatibilidades() {
+		List incomp = controlador.obtenerIncompatibilidades();
 		List aux;
-		for (int i = 0; i < lista.size(); i++) {
-			aux = (List) lista.get(i);
+		for (int i = 0; i < incomp.size(); i++) {
+			aux = (List) incomp.get(i);
 			for (int j = 0; j < aux.size(); j++) {
 				System.out.print(aux.get(j) + " - incompatible con -> ");
 			}
 			System.out.println("");
 		}
 	}
-
+	
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
