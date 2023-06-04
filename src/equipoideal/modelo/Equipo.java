@@ -8,17 +8,19 @@ import java.util.List;
 public class Equipo {
 
 	List<Empleado> empleados = new ArrayList<>();
-	List<List<Empleado>> imcompatibles = new ArrayList<>();
+	List<List<Empleado>> incompatibles = new ArrayList<>();
 	
 	public void cargarEmpleado(Empleado e) {
+		// si el empleado ya existe, se debe lanzar una excepcion
 		empleados.add(e);
 	}
 	
 	public void cargarIncompatibles(Empleado e1, Empleado e2) {
+		// si son los mismos. o si alguno no es empleado, se debe lanzar una excepcion
 		List<Empleado> par = new ArrayList<>();
 		par.add(e1);
 		par.add(e2);
-		this.imcompatibles.add(par);
+		this.incompatibles.add(par);
 	}
 		
 	public static List<Empleado> encontrarEquipoSinConflictos(List<Empleado> empleados, List<List<Empleado>> incompatibles, List<String> rolesRequeridos) {
@@ -102,5 +104,9 @@ public class Equipo {
 		if (e.equals(null)) throw new RuntimeException("Empleado no encontrado");
 		
 		empleados.remove(e);
+	}
+	
+	public List<List<Empleado>> getIncompatibilidades() {
+		return incompatibles;
 	}
 }

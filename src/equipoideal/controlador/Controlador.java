@@ -22,5 +22,10 @@ public class Controlador {
 		
 		System.out.println(nombre + " ha sido eliminado de la lista de Empleados.");
 	}
+	
+	public List<List<Empleado>> obtenerIncompatibilidades() {
+		// esta bien que devuelva la lista¿¿??
+		return e.getIncompatibilidades();
+	}
 
 }
