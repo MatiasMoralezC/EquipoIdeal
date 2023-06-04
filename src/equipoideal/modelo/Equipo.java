@@ -15,12 +15,27 @@ public class Equipo {
 		empleados.add(e);
 	}
 	
-	public void cargarIncompatibles(Empleado e1, Empleado e2) {
+	public void cargarIncompatibles(String nombre1, String nombre2) {
 		// si son los mismos. o si alguno no es empleado, se debe lanzar una excepcion
-		List<Empleado> par = new ArrayList<>();
-		par.add(e1);
-		par.add(e2);
+		if(nombre1.equals(nombre2)) {
+			throw new RuntimeException("los nombres ingresados son iguales");
+		}
+		if(!verificarEmpleado(nombre1) || !verificarEmpleado(nombre2)) {
+			throw new RuntimeException("alguno de los nombres ingresados no es valido");
+		}
+		
+		// chequear
+		List<Empleado> par = empleados.stream()
+		.filter(p -> p.getNombre().equals(nombre1) || p.getNombre().equals(nombre2))
+		.toList();
+		
 		this.incompatibles.add(par);
+	}
+	
+	private boolean verificarEmpleado(String nombre) {
+		// chequear
+		return empleados.stream()
+				.anyMatch(p -> p.getNombre().equals(nombre));
 	}
 		
 	public static List<Empleado> encontrarEquipoSinConflictos(List<Empleado> empleados, List<List<Empleado>> incompatibles, List<String> rolesRequeridos) {

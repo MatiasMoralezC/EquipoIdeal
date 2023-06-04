@@ -51,8 +51,15 @@ public class Controlador {
 	}
 
 	public void agregarIncompatibilidades() {
-		// TODO Auto-generated method stub
-		
+		try ( // ---------------------------------------> el try deberia cerrar el lector
+			Scanner lector = new Scanner(System.in)) {
+			System.out.println("Ingrese el primer nombre: ");
+			String nombre1 = lector.next();
+
+			System.out.println("Ingrese el segundo nombre: ");
+			String nombre2 = lector.next();
+			e.cargarIncompatibles(nombre1.toUpperCase(), nombre2.toUpperCase());
+		}
 	}
 
 }

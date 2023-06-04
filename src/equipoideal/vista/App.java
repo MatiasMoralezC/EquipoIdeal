@@ -217,10 +217,7 @@ public class App {
 		List aux;
 		for (int i = 0; i < incomp.size(); i++) {
 			aux = (List) incomp.get(i);
-			for (int j = 0; j < aux.size(); j++) {
-				System.out.print(aux.get(j) + " - incompatible con -> ");
-			}
-			System.out.println("");
+			System.out.println(aux);
 		}
 	}
 	
