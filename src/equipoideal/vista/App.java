@@ -81,6 +81,7 @@ public class App {
 
 		JButton btnVerEmpleados = new JButton("Ver Empleados");
 		btnVerEmpleados.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				imprimirEmpleados();
 			}
@@ -92,6 +93,7 @@ public class App {
 		JButton btnAgregarEmpleado = new JButton("Agregar Nuevo");
 		btnAgregarEmpleado.setForeground(new Color(0, 128, 0));
 		btnAgregarEmpleado.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				agregarEmpleado();
 			}
@@ -102,6 +104,7 @@ public class App {
 		JButton btnQuitarEmpleado = new JButton("Quitar");
 		btnQuitarEmpleado.setForeground(new Color(255, 0, 0));
 		btnQuitarEmpleado.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				quitarEmpleado();
 			}
@@ -117,6 +120,7 @@ public class App {
 		JButton btnVerIncompatibles = new JButton("Ver Incompatibles");
 		btnVerIncompatibles.setBounds(10, 201, 155, 23);
 		btnVerIncompatibles.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				verIncompatibilidades();
 			}
@@ -127,6 +131,7 @@ public class App {
 		btnAgregarIncompat.setForeground(new Color(0, 128, 0));
 		btnAgregarIncompat.setBounds(175, 201, 133, 23);
 		btnAgregarIncompat.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				agregarIncompatibilidades();
 			}
@@ -137,6 +142,7 @@ public class App {
 		btnQuitarIncompat.setForeground(new Color(255, 0, 0));
 		btnQuitarIncompat.setBounds(318, 201, 89, 23);
 		btnQuitarIncompat.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				imprimirIncompatibilidades();
 				controlador.eliminarIncompatibilidad();
@@ -151,6 +157,12 @@ public class App {
 
 		JButton btnVerRequerimientos = new JButton("Ver Requerimientos");
 		btnVerRequerimientos.setBounds(10, 291, 155, 23);
+		btnVerRequerimientos.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				imprimirRequerimientos();
+			}
+		});
 		frmTrabajoPracticoIii.getContentPane().add(btnVerRequerimientos);
 
 		JButton btnAgregarReq = new JButton("Agregar Nuevo");
@@ -180,6 +192,7 @@ public class App {
 		JButton btnFormarEquipo = new JButton("Formar Equipo");
 		btnFormarEquipo.setForeground(new Color(0, 128, 255));
 		btnFormarEquipo.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				/*
 				 * List<Empleado> equipo = c.formarEquipo(empleados, incompatibles,
@@ -225,6 +238,12 @@ public class App {
 		for (int i = 0; i < incomp.size(); i++) {
 			aux = (List) incomp.get(i);
 			System.out.println(aux);
+		}
+	}
+	
+	private void imprimirRequerimientos() {
+		for(String requer: controlador.obtenerRequerimientos()) {
+			System.out.println(requer);
 		}
 	}
 	

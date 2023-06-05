@@ -3,6 +3,7 @@ package equipoideal.controlador;
 import java.util.List;
 import java.util.Scanner;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 import equipoideal.modelo.Empleado;
 import equipoideal.modelo.Equipo;
@@ -102,6 +103,12 @@ public class Controlador {
 		int cant = lector.nextInt();
 		
 		requerimientos.put(rol, cant);
+	}
+	
+	public List<String> obtenerRequerimientos() {
+		List<String> aux = new ArrayList<>();
+		requerimientos.forEach((k,v) -> aux.add("se requieren "+ v +" para "+k.toString()));
+		return aux;
 	}
 
 }
