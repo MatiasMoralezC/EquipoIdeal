@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Equipo {
 
@@ -44,63 +45,85 @@ public class Equipo {
 	}
 		
 	public static List<Empleado> encontrarEquipoSinConflictos(List<Empleado> empleados, List<List<Empleado>> incompatibles, HashMap<Rol, Integer> rolesRequeridos) {
-        int n = empleados.size();
-        List<Empleado> mejorEquipo = new ArrayList<>();
-        int mejorContador = -1;
-        
-        // Ordenar los empleados por calificación (de mayor a menor) VERIFICAR SI FUNCIONA!!!!
-        empleados.sort((empleado1, empleado2) -> Double.compare(empleado2.getCalificacion(), empleado1.getCalificacion()));
-        
-        // Generar todas las posibles combinaciones de empleados
-        for (int i = 0; i < (1 << n); i++) {
-            List<Empleado> equipoActual = new ArrayList<>();
-            int contadorConflictos = 0;
-            boolean esEquipoValido = true;
-            
-            // Verificar cada empleado en la combinación
-            for (int j = 0; j < n; j++) {
-                if (((i >> j) & 1) == 1) {
-                    Empleado empleado = empleados.get(j);
-                    
-                    // Verificar si el empleado tiene el rol requerido
-                    if ( !verificarRequerimiento(rolesRequeridos, empleado) ) {
-                        esEquipoValido = false;
-                        break;
-                    }
-                    
-                    equipoActual.add(empleado);
-                }
-            }
-            
-            
-            // Salta a la siguiente iteración del for en caso de que el equipo actual no cumpla 
-            //con los requisitos necesarios.
-            if (!esEquipoValido) {
-                continue;
-            }
-            
-            // Verificar conflictos entre empleados
-            for (List<Empleado> incompatibilidad : incompatibles) {
-                Empleado empleado1 = incompatibilidad.get(0);
-                Empleado empleado2 = incompatibilidad.get(1);
-                
-                if (equipoActual.contains(empleado1) && equipoActual.contains(empleado2)) {
-                    contadorConflictos++;
-                    esEquipoValido = false;
-                    break;
-                }
-            }
-            
-            // Actualizar el mejor equipo encontrado hasta ahora
-            if (esEquipoValido && contadorConflictos > mejorContador) {
-                mejorEquipo = equipoActual;
-                mejorContador = contadorConflictos;
-            }
-            System.out.println(mejorEquipo.toString());
-        }
-        
-        return mejorEquipo;
-    }
+	    List<Empleado> mejorEquipo = new ArrayList<>();
+	    int mejorContador = Integer.MAX_VALUE;
+
+	    for (int i = 1; i <= empleados.size(); i++) {
+	        List<List<Empleado>> combinaciones = generarCombinaciones(empleados, i);
+	        
+	        for (List<Empleado> combinacion : combinaciones) {
+	            boolean cumpleRequerimientos = verificarRequerimientos(rolesRequeridos, combinacion);
+	            boolean tieneConflictos = tieneConflictos(combinacion, incompatibles);
+	            
+	            if (cumpleRequerimientos && !tieneConflictos) {
+	                if (combinacion.size() < mejorContador) {
+	                    mejorEquipo = combinacion;
+	                    mejorContador = combinacion.size();
+	                }
+	            }
+	        }
+
+	        System.out.println("Mejor equipo hasta el momento: " + mejorEquipo.toString());
+	    }
+
+	    System.out.println("Mejor equipo encontrado: " + mejorEquipo.toString());
+	    return mejorEquipo;
+	}
+
+	public static List<List<Empleado>> generarCombinaciones(List<Empleado> empleados, int r) {
+	    List<List<Empleado>> result = new ArrayList<>();
+	    generarCombinacionesRecursivo(empleados, r, 0, new ArrayList<>(), result);
+	    return result;
+	}
+
+	public static void generarCombinacionesRecursivo(List<Empleado> empleados, int r, int index, List<Empleado> combinacionActual, List<List<Empleado>> result) {
+	    if (combinacionActual.size() == r) {
+	        result.add(new ArrayList<>(combinacionActual));
+	        return;
+	    }
+
+	    for (int i = index; i < empleados.size(); i++) {
+	        combinacionActual.add(empleados.get(i));
+	        generarCombinacionesRecursivo(empleados, r, i + 1, combinacionActual, result);
+	        combinacionActual.remove(combinacionActual.size() - 1);
+	    }
+	}
+
+	public static boolean verificarRequerimientos(HashMap<Rol, Integer> rolesRequeridos, List<Empleado> equipo) {
+	    HashMap<Rol, Integer> contadorRoles = new HashMap<>();
+
+	    for (Empleado empleado : equipo) {
+	        Rol rol = empleado.getRol();
+	        contadorRoles.put(rol, contadorRoles.getOrDefault(rol, 0) + 1);
+	    }
+
+	    for (Map.Entry<Rol, Integer> entry : rolesRequeridos.entrySet()) {
+	        Rol rol = entry.getKey();
+	        int cantidadRequerida = entry.getValue();
+	        int cantidadActual = contadorRoles.getOrDefault(rol, 0);
+	        
+	        if (cantidadActual < cantidadRequerida) {
+	            return false;
+	        }
+	    }
+
+	    return true;
+	}
+
+	public static boolean tieneConflictos(List<Empleado> equipo, List<List<Empleado>> incompatibles) {
+	    for (List<Empleado> incompatibilidad : incompatibles) {
+	        Empleado empleado1 = incompatibilidad.get(0);
+	        Empleado empleado2 = incompatibilidad.get(1);
+
+	        if (equipo.contains(empleado1) && equipo.contains(empleado2)) {
+	            return true;
+	        }
+	    }
+
+	    return false;
+	}
+	
+	//////////////////////////////////////////////////////
 	
 	private static boolean verificarRequerimiento(HashMap<Rol, Integer> requerimientos, Empleado e) {
 //		if(requerimientos == null || requerimientos.isEmpty())

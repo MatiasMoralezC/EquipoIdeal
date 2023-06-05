@@ -160,7 +160,7 @@ public class Controlador {
 		HashMap<Rol, Integer> requerimientos = obtenerMapDeRequerimientos();
 
 		Thread equipoIdealThread = new Thread(() -> {
-			e.encontrarEquipoSinConflictos(empleados, incompatibles, requerimientos);
+			equipoIdeal = e.encontrarEquipoSinConflictos(empleados, incompatibles, requerimientos);
 		});
 
 		equipoIdealThread.start();

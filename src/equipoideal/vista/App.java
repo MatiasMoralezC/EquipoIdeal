@@ -202,14 +202,7 @@ public class App {
 		JButton btnFormarEquipo = new JButton("Formar Equipo");
 		btnFormarEquipo.setForeground(new Color(0, 128, 255));
 		btnFormarEquipo.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
-				/*
-				 * List<Empleado> equipo = c.formarEquipo(empleados, incompatibles,
-				 * rolesRequeridos);
-				 * 
-				 * System.out.println(equipo);
-				 */
 				controlador.formarEquipo();
 			}
 		});
@@ -228,7 +221,7 @@ public class App {
 	}
 
 	private void verIncompatibilidades() {
-		imprimirEmpleados();
+		//imprimirEmpleados();
 		System.out.println("::::: incompatibilidades :::::");
 		imprimirIncompatibilidades();
 		// controlador.obtenerIncompatibilidades()
@@ -243,7 +236,7 @@ public class App {
 		System.out.println("::::: empleados :::::\n"+controlador.verEmpleados().toString());
 	}
 
-	private void imprimirIncompatibilidades() {
+	private void imprimirIncompatibilidades() {		
 		List incomp = controlador.obtenerIncompatibilidades();
 		List aux;
 		for (int i = 0; i < incomp.size(); i++) {
@@ -253,6 +246,8 @@ public class App {
 	}
 	
 	private void imprimirRequerimientos() {
+		System.out.println("::::: requerimientos :::::\n");
+		
 		for(String requer: controlador.obtenerRequerimientos()) {
 			System.out.println(requer);
 		}
