@@ -136,6 +136,12 @@ public class App {
 		JButton btnQuitarIncompat = new JButton("Quitar");
 		btnQuitarIncompat.setForeground(new Color(255, 0, 0));
 		btnQuitarIncompat.setBounds(318, 201, 89, 23);
+		btnQuitarIncompat.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				imprimirIncompatibilidades();
+				controlador.eliminarIncompatibilidad();
+			}
+		});
 		frmTrabajoPracticoIii.getContentPane().add(btnQuitarIncompat);
 
 		JLabel lblNewLabel_Req = new JLabel("Requerimientos");
@@ -209,7 +215,7 @@ public class App {
 	}
 	
 	private void imprimirEmpleados() {
-		System.out.println(controlador.verEmpleados().toString());
+		System.out.println("::::: empleados :::::\n"+controlador.verEmpleados().toString());
 	}
 
 	private void imprimirIncompatibilidades() {

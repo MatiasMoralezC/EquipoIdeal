@@ -51,15 +51,20 @@ public class Controlador {
 	}
 
 	public void agregarIncompatibilidades() {
-		try ( // ---------------------------------------> el try deberia cerrar el lector
-			Scanner lector = new Scanner(System.in)) {
-			System.out.println("Ingrese el primer nombre: ");
-			String nombre1 = lector.next();
+		Scanner lector = new Scanner(System.in);
+		System.out.println("Ingrese el primer nombre: ");
+		String nombre1 = lector.next();
+		System.out.println("Ingrese el segundo nombre: ");
+		String nombre2 = lector.next();
+		e.cargarIncompatibles(nombre1.toUpperCase(), nombre2.toUpperCase());
+		
+	}
 
-			System.out.println("Ingrese el segundo nombre: ");
-			String nombre2 = lector.next();
-			e.cargarIncompatibles(nombre1.toUpperCase(), nombre2.toUpperCase());
-		}
+	public void eliminarIncompatibilidad() {
+		Scanner lector = new Scanner(System.in);
+		System.out.println("Dime el indice de la incompatibilidad a quitar: ");
+		int indexIncompat = lector.nextInt();
+		e.quitarIncompatibilidad(indexIncompat - 1); // ojo con esto
 	}
 
 }

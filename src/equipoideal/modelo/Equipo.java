@@ -16,13 +16,11 @@ public class Equipo {
 	}
 	
 	public void cargarIncompatibles(String nombre1, String nombre2) {
-		// si son los mismos. o si alguno no es empleado, se debe lanzar una excepcion
-		if(nombre1.equals(nombre2)) {
+		if(nombre1.equals(nombre2))
 			throw new RuntimeException("los nombres ingresados son iguales");
-		}
-		if(!verificarEmpleado(nombre1) || !verificarEmpleado(nombre2)) {
+		
+		if(!verificarEmpleado(nombre1) || !verificarEmpleado(nombre2))
 			throw new RuntimeException("alguno de los nombres ingresados no es valido");
-		}
 		
 		// chequear
 		List<Empleado> par = empleados.stream()
@@ -36,6 +34,12 @@ public class Equipo {
 		// chequear
 		return empleados.stream()
 				.anyMatch(p -> p.getNombre().equals(nombre));
+	}
+	
+	public void quitarIncompatibilidad(int index) {
+		if(index > incompatibles.size() || index < 0)
+			throw new RuntimeException("el indice de la incompatibilidad a quitar no es valido");
+		incompatibles.remove(index);
 	}
 		
 	public static List<Empleado> encontrarEquipoSinConflictos(List<Empleado> empleados, List<List<Empleado>> incompatibles, List<String> rolesRequeridos) {
