@@ -3,6 +3,7 @@ package equipoideal.modelo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 public class Equipo {
@@ -42,7 +43,7 @@ public class Equipo {
 		incompatibles.remove(index);
 	}
 		
-	public static List<Empleado> encontrarEquipoSinConflictos(List<Empleado> empleados, List<List<Empleado>> incompatibles, List<String> rolesRequeridos) {
+	public static List<Empleado> encontrarEquipoSinConflictos(List<Empleado> empleados, List<List<Empleado>> incompatibles, HashMap<Rol, Integer> rolesRequeridos) {
         int n = empleados.size();
         List<Empleado> mejorEquipo = new ArrayList<>();
         int mejorContador = -1;
@@ -62,7 +63,7 @@ public class Equipo {
                     Empleado empleado = empleados.get(j);
                     
                     // Verificar si el empleado tiene el rol requerido
-                    if (!rolesRequeridos.contains(empleado.getRol())) {
+                    if ( !verificarRequerimiento(rolesRequeridos, empleado) ) {
                         esEquipoValido = false;
                         break;
                     }
@@ -100,6 +101,12 @@ public class Equipo {
         
         return mejorEquipo;
     }
+	
+	private static boolean verificarRequerimiento(HashMap<Rol, Integer> requerimientos, Empleado e) {
+//		if(requerimientos == null || requerimientos.isEmpty())
+//			throw new RuntimeException("los requerimientos no son validos");
+		return requerimientos.containsKey( e.getRol() );
+	}
 	
 	// Uso streams para buscar a un empleado en base a su nombre
 	public Empleado buscarPorNombre(String nombre) {

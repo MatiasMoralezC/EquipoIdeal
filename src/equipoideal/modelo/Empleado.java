@@ -3,10 +3,10 @@ package equipoideal.modelo;
 public class Empleado {
 
 	private String nombre;
-	private String rol;
+	private Rol rol;
 	private int calificacion;
 	
-	public Empleado(String nombre, String rol, int calificacion) {
+	public Empleado(String nombre, Rol rol, int calificacion) {
 		this.nombre = nombre;
 		this.rol = rol;
 		this.calificacion = calificacion;
@@ -16,7 +16,7 @@ public class Empleado {
 		return this.nombre;
 	}
 
-	public String getRol() {
+	public Rol getRol() {
 		// TODO Auto-generated method stub
 		return this.rol;
 	}
@@ -27,6 +27,6 @@ public class Empleado {
 
 	@Override
 	public String toString() {
-		return  "\n" + rol.toUpperCase() + " -- Nombre: " + nombre + ", Calificacion: " + calificacion;
+		return  "\n" + rol.toString() + " -- Nombre: " + nombre + ", Calificacion: " + calificacion;
 	}
 }
