@@ -176,6 +176,11 @@ public class App {
 		frmTrabajoPracticoIii.getContentPane().add(btnAgregarReq);
 
 		JButton btnQuitarReq = new JButton("Quitar");
+		btnQuitarReq.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controlador.quitarRequerimiento();
+			}
+		});
 		btnQuitarReq.setForeground(new Color(255, 0, 0));
 		btnQuitarReq.setBounds(318, 291, 89, 23);
 		frmTrabajoPracticoIii.getContentPane().add(btnQuitarReq);
@@ -186,6 +191,11 @@ public class App {
 		frmTrabajoPracticoIii.getContentPane().add(lblNewLabel_EquipoIdeal);
 
 		JButton btnVerEquipoIdeal = new JButton("Ver Equipo");
+		btnVerEquipoIdeal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controlador.imprimirEquipo();
+			}
+		});
 		btnVerEquipoIdeal.setBounds(10, 378, 133, 23);
 		frmTrabajoPracticoIii.getContentPane().add(btnVerEquipoIdeal);
 
@@ -200,6 +210,7 @@ public class App {
 				 * 
 				 * System.out.println(equipo);
 				 */
+				controlador.formarEquipo();
 			}
 		});
 		btnFormarEquipo.setBounds(153, 378, 124, 23);

@@ -12,6 +12,7 @@ import equipoideal.modelo.Rol;
 public class Controlador {
 	Equipo e = new Equipo();
 	HashMap<Rol, Integer> requerimientos = new HashMap<Rol, Integer>();
+	List<Empleado> equipoIdeal = new ArrayList<>();
 
 	public void agregarEmpleado() {
 		Scanner lector = new Scanner(System.in);
@@ -56,6 +57,10 @@ public class Controlador {
 		return e.verEmpleados();
 	}
 
+	public HashMap<Rol, Integer> obtenerMapDeRequerimientos() {
+		return this.requerimientos;
+	}
+
 	public void quitarEmpleado() { // deberia ser boolean¿?
 		try (Scanner lector = new Scanner(System.in)) {
 			System.out.println("Ingrese el nombre: ");
@@ -93,22 +98,72 @@ public class Controlador {
 	public void agregarRequerimiento() {
 		Scanner lector = new Scanner(System.in);
 		Rol rol = conseguirRol(lector);
-		if(requerimientos.containsKey(rol)) {
-			// ------------------------  esta bien o aumentamos el value?
+		if (requerimientos.containsKey(rol)) {
+			// ------------------------ esta bien o aumentamos el value?
 			throw new RuntimeException("El requerimiento que quieres ingresar ya existe");
 		}
 		// añadir requerimiento
-		
-		System.out.println("Ingrese su cantidad para el rol "+rol.toString()+": ");
+
+		System.out.println("Ingrese su cantidad para el rol " + rol.toString() + ": ");
 		int cant = lector.nextInt();
-		
+
 		requerimientos.put(rol, cant);
 	}
-	
+
 	public List<String> obtenerRequerimientos() {
 		List<String> aux = new ArrayList<>();
-		requerimientos.forEach((k,v) -> aux.add("se requieren "+ v +" para "+k.toString()));
+		requerimientos.forEach((k, v) -> aux.add("se requieren " + v + " para " + k.toString()));
 		return aux;
+	}
+
+	public void quitarRequerimiento() {
+		Scanner lector = new Scanner(System.in);
+		Rol rol = conseguirRol(lector);
+
+		System.out.println("Ingrese su cantidad que desea quitar del  rol " + rol.toString() + ": ");
+		int cant = lector.nextInt();
+		int cantidadDelRol = cantidadRol(rol);
+
+		if (cantidadDelRol < cant) {
+			throw new RuntimeException("No existe esa cantidad de " + rol.toString());
+		} else if (cantidadDelRol > cant) {
+			requerimientos.remove(rol);
+			requerimientos.put(rol, cantidadDelRol - cant);
+			// requerimientos.put(rol, requerimientos.get(rol) + 1);
+			System.out.println("Se ha/n quitado " + cant + " " + rol.toString() + "/s");
+		} else {
+			requerimientos.remove(rol);
+			System.out.println("Se han quitado todos los " + rol.toString());
+		}
+
+	}
+
+	public int cantidadRol(Rol rol) {
+		if (!requerimientos.containsKey(rol)) {
+			// ------------------------ esta bien o aumentamos el value?
+			throw new RuntimeException("El requerimiento que intenta quitar no existe");
+		}
+
+		return requerimientos.get(rol);
+	}
+
+	public void imprimirEquipo() {
+		if (equipoIdeal.isEmpty())
+			throw new RuntimeException("Aun no se creo un equipo");
+
+		System.out.println(equipoIdeal.toString());
+	}
+
+	public void formarEquipo() {
+		List<Empleado> empleados = verEmpleados();
+		List<List<Empleado>> incompatibles = obtenerIncompatibilidades();
+		HashMap<Rol, Integer> requerimientos = obtenerMapDeRequerimientos();
+
+		Thread equipoIdealThread = new Thread(() -> {
+			e.encontrarEquipoSinConflictos(empleados, incompatibles, requerimientos);
+		});
+
+		equipoIdealThread.start();
 	}
 
 }
