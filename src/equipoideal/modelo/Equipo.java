@@ -45,29 +45,91 @@ public class Equipo {
 	}
 		
 	public static List<Empleado> encontrarEquipoSinConflictos(List<Empleado> empleados, List<List<Empleado>> incompatibles, HashMap<Rol, Integer> rolesRequeridos) {
+	    List<Empleado> empleadosFiltrados = filtrarEmpleadosNoRequeridos(empleados, rolesRequeridos);
 	    List<Empleado> mejorEquipo = new ArrayList<>();
 	    int mejorContador = Integer.MAX_VALUE;
+	    double mejorCalificacion = 0.0;
 
-	    for (int i = 1; i <= empleados.size(); i++) {
-	        List<List<Empleado>> combinaciones = generarCombinaciones(empleados, i);
-	        
+	    for (int i = 1; i <= empleadosFiltrados.size(); i++) {
+	        List<List<Empleado>> combinaciones = generarCombinaciones(empleadosFiltrados, i);
+
 	        for (List<Empleado> combinacion : combinaciones) {
-	            boolean cumpleRequerimientos = verificarRequerimientos(rolesRequeridos, combinacion);
 	            boolean tieneConflictos = tieneConflictos(combinacion, incompatibles);
-	            
-	            if (cumpleRequerimientos && !tieneConflictos) {
-	                if (combinacion.size() < mejorContador) {
+
+	            if (!tieneConflictos || mejorEquipo.isEmpty()) {
+	                double calificacion = obtenerCalificacionTotal(combinacion);
+
+	                int empleadosRequeridosCumplidos = contarEmpleadosRequeridosCumplidos(rolesRequeridos, combinacion);
+
+	                if (empleadosRequeridosCumplidos == empleadosFiltrados.size()) {
 	                    mejorEquipo = combinacion;
 	                    mejorContador = combinacion.size();
+	                    mejorCalificacion = calificacion;
+	                    break;  // Se cumplieron todos los requerimientos, no es necesario seguir buscando.
+	                } else if (empleadosRequeridosCumplidos >= mejorContador && calificacion < mejorCalificacion) {
+	                    continue;  // No cumple con los requerimientos mínimos, pasamos a la siguiente combinación.
 	                }
+
+	                if (calificacion > mejorCalificacion) {
+	                    mejorEquipo = combinacion;
+	                    mejorContador = empleadosRequeridosCumplidos;
+	                    mejorCalificacion = calificacion;
+	                }
+	                // CONTEMPLAR EL CASO EN EL QUE NO HAY CONFLICTOS Y SE REQUIEREN MENOS EMPLEADOS DE UN ROL
+	                //DE LOS QUE HAY EN TOTAL
 	            }
 	        }
-
+	        
 	        System.out.println("Mejor equipo hasta el momento: " + mejorEquipo.toString());
 	    }
 
 	    System.out.println("Mejor equipo encontrado: " + mejorEquipo.toString());
 	    return mejorEquipo;
+	}
+
+	private static List<Empleado> filtrarEmpleadosNoRequeridos(List<Empleado> empleados, HashMap<Rol, Integer> rolesRequeridos) {
+	    List<Empleado> empleadosFiltrados = new ArrayList<>();
+
+	    for (Empleado empleado : empleados) {
+	        if (rolesRequeridos.containsKey(empleado.getRol())) {
+	            empleadosFiltrados.add(empleado);
+	        }
+	    }
+
+	    return empleadosFiltrados;
+	}
+	
+	public static int contarEmpleadosRequeridosCumplidos(HashMap<Rol, Integer> rolesRequeridos, List<Empleado> equipo) {
+	    HashMap<Rol, Integer> contadorRoles = new HashMap<>();
+
+	    for (Empleado empleado : equipo) {
+	        Rol rol = empleado.getRol();
+	        contadorRoles.put(rol, contadorRoles.getOrDefault(rol, 0) + 1);
+	    }
+
+	    int empleadosRequeridosCumplidos = 0;
+
+	    for (Map.Entry<Rol, Integer> entry : rolesRequeridos.entrySet()) {
+	        Rol rol = entry.getKey();
+	        int cantidadRequerida = entry.getValue();
+	        int cantidadActual = contadorRoles.getOrDefault(rol, 0);
+
+	        if (cantidadActual >= cantidadRequerida) {
+	            empleadosRequeridosCumplidos += cantidadRequerida;
+	        }
+	    }
+
+	    return empleadosRequeridosCumplidos;
+	}
+
+	public static double obtenerCalificacionTotal(List<Empleado> equipo) {
+	    double calificacionTotal = 0.0;
+
+	    for (Empleado empleado : equipo) {
+	        calificacionTotal += empleado.getCalificacion();
+	    }
+
+	    return calificacionTotal;
 	}
 
 	public static List<List<Empleado>> generarCombinaciones(List<Empleado> empleados, int r) {
@@ -89,26 +151,26 @@ public class Equipo {
 	    }
 	}
 
-	public static boolean verificarRequerimientos(HashMap<Rol, Integer> rolesRequeridos, List<Empleado> equipo) {
-	    HashMap<Rol, Integer> contadorRoles = new HashMap<>();
-
-	    for (Empleado empleado : equipo) {
-	        Rol rol = empleado.getRol();
-	        contadorRoles.put(rol, contadorRoles.getOrDefault(rol, 0) + 1);
-	    }
-
-	    for (Map.Entry<Rol, Integer> entry : rolesRequeridos.entrySet()) {
-	        Rol rol = entry.getKey();
-	        int cantidadRequerida = entry.getValue();
-	        int cantidadActual = contadorRoles.getOrDefault(rol, 0);
-	        
-	        if (cantidadActual < cantidadRequerida) {
-	            return false;
-	        }
-	    }
-
-	    return true;
-	}
+//	public static boolean verificarRequerimientos(HashMap<Rol, Integer> rolesRequeridos, List<Empleado> equipo) {
+//	    HashMap<Rol, Integer> contadorRoles = new HashMap<>();
+//
+//	    for (Empleado empleado : equipo) {
+//	        Rol rol = empleado.getRol();
+//	        contadorRoles.put(rol, contadorRoles.getOrDefault(rol, 0) + 1);
+//	    }
+//
+//	    for (Map.Entry<Rol, Integer> entry : rolesRequeridos.entrySet()) {
+//	        Rol rol = entry.getKey();
+//	        int cantidadRequerida = entry.getValue();
+//	        int cantidadActual = contadorRoles.getOrDefault(rol, 0);
+//	        
+//	        if (cantidadActual < cantidadRequerida) {
+//	            return false;
+//	        }
+//	    }
+//
+//	    return true;
+//	}
 
 	public static boolean tieneConflictos(List<Empleado> equipo, List<List<Empleado>> incompatibles) {
 	    for (List<Empleado> incompatibilidad : incompatibles) {
