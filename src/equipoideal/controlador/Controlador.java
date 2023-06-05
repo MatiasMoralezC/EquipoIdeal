@@ -2,6 +2,7 @@ package equipoideal.controlador;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.HashMap;
 
 import equipoideal.modelo.Empleado;
 import equipoideal.modelo.Equipo;
@@ -9,6 +10,7 @@ import equipoideal.modelo.Rol;
 
 public class Controlador {
 	Equipo e = new Equipo();
+	HashMap<Rol, Integer> requerimientos = new HashMap<Rol, Integer>();
 
 	public void agregarEmpleado() {
 		Scanner lector = new Scanner(System.in);
@@ -85,6 +87,21 @@ public class Controlador {
 		System.out.println("Dime el indice de la incompatibilidad a quitar: ");
 		int indexIncompat = lector.nextInt();
 		e.quitarIncompatibilidad(indexIncompat - 1); // ojo con esto
+	}
+
+	public void agregarRequerimiento() {
+		Scanner lector = new Scanner(System.in);
+		Rol rol = conseguirRol(lector);
+		if(requerimientos.containsKey(rol)) {
+			// ------------------------  esta bien o aumentamos el value?
+			throw new RuntimeException("El requerimiento que quieres ingresar ya existe");
+		}
+		// añadir requerimiento
+		
+		System.out.println("Ingrese su cantidad para el rol "+rol.toString()+": ");
+		int cant = lector.nextInt();
+		
+		requerimientos.put(rol, cant);
 	}
 
 }

@@ -156,6 +156,7 @@ public class App {
 		JButton btnAgregarReq = new JButton("Agregar Nuevo");
 		btnAgregarReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				controlador.agregarRequerimiento();
 			}
 		});
 		btnAgregarReq.setForeground(new Color(0, 128, 0));
