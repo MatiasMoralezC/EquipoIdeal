@@ -16,6 +16,7 @@ public class Controlador {
 
 	public void agregarEmpleado() {
 		Scanner lector = new Scanner(System.in);
+		System.out.println(lector);
 
 		System.out.println("Ingrese el nombre: ");
 		String nombre = lector.next();
@@ -62,15 +63,14 @@ public class Controlador {
 	}
 
 	public void quitarEmpleado() { // deberia ser boolean¿?
-		try (Scanner lector = new Scanner(System.in)) {
-			System.out.println("Ingrese el nombre: ");
-			String nombre = lector.next();
-//		lector.close();
+		Scanner lector = new Scanner(System.in);
+		System.out.println("Ingrese el nombre: ");
+		String nombre = lector.next();
 
-			e.quitarEmpleado(nombre);
+		e.quitarEmpleado(nombre);
 
-			System.out.println(nombre + " ha sido eliminado de la lista de Empleados.");
-		}
+		System.out.println(nombre + " ha sido eliminado de la lista de Empleados.");
+
 	}
 
 	public List<List<Empleado>> obtenerIncompatibilidades() {
@@ -84,6 +84,7 @@ public class Controlador {
 		String nombre1 = lector.next();
 		System.out.println("Ingrese el segundo nombre: ");
 		String nombre2 = lector.next();
+		
 		e.cargarIncompatibles(nombre1.toUpperCase(), nombre2.toUpperCase());
 
 	}
@@ -92,6 +93,7 @@ public class Controlador {
 		Scanner lector = new Scanner(System.in);
 		System.out.println("Dime el indice de la incompatibilidad a quitar: ");
 		int indexIncompat = lector.nextInt();
+
 		e.quitarIncompatibilidad(indexIncompat - 1); // ojo con esto
 	}
 
@@ -106,6 +108,7 @@ public class Controlador {
 
 		System.out.println("Ingrese su cantidad para el rol " + rol.toString() + ": ");
 		int cant = lector.nextInt();
+
 
 		requerimientos.put(rol, cant);
 	}
