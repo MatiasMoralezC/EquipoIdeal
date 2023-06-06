@@ -133,6 +133,9 @@ public class Equipo {
 	}
 
 	public static List<List<Empleado>> generarCombinaciones(List<Empleado> empleados, int r) {
+		if(empleados == null || empleados.isEmpty() || r > empleados.size())
+			throw new RuntimeException("No se pueden generar las combinaciones");
+		
 	    List<List<Empleado>> result = new ArrayList<>();
 	    generarCombinacionesRecursivo(empleados, r, 0, new ArrayList<>(), result);
 	    return result;

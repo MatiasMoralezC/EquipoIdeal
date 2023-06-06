@@ -30,7 +30,7 @@ public class EquipoTest {
 	 * 
 	 * int contarEmpleadosRequeridosCumplidos(HashMap<Rol, Integer> rolesRequeridos, List<Empleado> equipo)
 	 * 
-	 * double obtenerCalificacionTotal(List<Empleado> equipo)
+	 * double obtenerCalificacionTotal(List<Empleado> equipo) -- listo
 	 * 
 	 * List<List<Empleado>> generarCombinaciones(List<Empleado> empleados, int r)
 	 * 
@@ -40,7 +40,7 @@ public class EquipoTest {
 	 * 
 	 * boolean verificarRequerimiento(HashMap<Rol, Integer> requerimientos, Empleado e)
 	 * 
-	 * Empleado buscarPorNombre(String nombre)
+	 * Empleado buscarPorNombre(String nombre) -- listo
 	 */
 	
 
@@ -147,9 +147,40 @@ public class EquipoTest {
 		
 	}
 	
+//	List<List<Empleado>> generarCombinaciones(List<Empleado> empleados, int r)
+	@Test(expected = Exception.class)
+	public void generarCombinacionesSinEmpleados() {
+		equipo.generarCombinaciones(new ArrayList<>(), 0);
+	}
 	
+	@Test(expected = Exception.class)
+	public void generarCombinacionesEmpleadosNull() {
+		equipo.generarCombinaciones(null, 0);
+	}
 	
-	
+	@Test(expected = Exception.class)
+	public void generarCombinacionesCantMayor() {
+		List empleados = new ArrayList<>();
+		List<Empleado> aux = new ArrayList<Empleado>();
+		aux.add( new Empleado("paula", Rol.LIDER_DE_PROYECTO, 5) );
+		aux.add( new Empleado("pilar", Rol.ARQUITECTO, 5) );
+		
+		equipo.generarCombinaciones(aux, 3);
+	}
+
+	// --------- FALTA TESTEAR
+//	@Test
+//	public void generarCombinacionesCorrecto() {
+//		List empleados = new ArrayList<>();
+//		List<Empleado> aux = new ArrayList<Empleado>();
+//		aux.add( new Empleado("paula", Rol.LIDER_DE_PROYECTO, 5) );
+//		aux.add( new Empleado("pilar", Rol.ARQUITECTO, 5) );
+//		aux.add( new Empleado("pepita", Rol.TESTER, 5) );
+//		
+//		System.out.println(equipo.generarCombinaciones(aux, 3));
+//		
+//		
+//	}
 	
 	
 	
