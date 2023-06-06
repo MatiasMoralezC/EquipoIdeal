@@ -44,151 +44,96 @@ public class Equipo {
 		incompatibles.remove(index);
 	}
 		
-	public static List<Empleado> encontrarEquipoSinConflictos(List<Empleado> empleados, List<List<Empleado>> incompatibles, HashMap<Rol, Integer> rolesRequeridos) {
-	    List<Empleado> empleadosFiltrados = filtrarEmpleadosNoRequeridos(empleados, rolesRequeridos);
+	public static List<Empleado> encontrarEquipoSinConflictos(List<Empleado> empleados, List<List<Empleado>> incompatibilidades, Map<Rol, Integer> requerimientos) {
 	    List<Empleado> mejorEquipo = new ArrayList<>();
-	    int mejorContador = Integer.MAX_VALUE;
-	    double mejorCalificacion = 0.0;
 
-	    for (int i = 1; i <= empleadosFiltrados.size(); i++) {
-	        List<List<Empleado>> combinaciones = generarCombinaciones(empleadosFiltrados, i);
+	    // Generar todas las combinaciones posibles de empleados
+	    List<List<Empleado>> combinaciones = generarCombinaciones(empleados, 0);
 
-	        for (List<Empleado> combinacion : combinaciones) {
-	            boolean tieneConflictos = tieneConflictos(combinacion, incompatibles);
+	    // Recorrer todas las combinaciones
+	    for (List<Empleado> equipo : combinaciones) {
+	    	System.out.println("Mejor equipo hasta ahora: "+mejorEquipo.toString());
+	        if (cumpleRequerimientos(equipo, requerimientos) && noEsIncompatible(equipo, incompatibilidades)) {
+	            // El equipo cumple con los requerimientos y no tiene incompatibilidades
+	            int calificacionEquipo = calcularCalificacionTotal(equipo);
+	            int calificacionMejorEquipo = calcularCalificacionTotal(mejorEquipo);
 
-	            if (!tieneConflictos || mejorEquipo.isEmpty()) {
-	                double calificacion = obtenerCalificacionTotal(combinacion);
-
-	                int empleadosRequeridosCumplidos = contarEmpleadosRequeridosCumplidos(rolesRequeridos, combinacion);
-
-	                if (empleadosRequeridosCumplidos == empleadosFiltrados.size()) {
-	                    mejorEquipo = combinacion;
-	                    mejorContador = combinacion.size();
-	                    mejorCalificacion = calificacion;
-	                    break;  // Se cumplieron todos los requerimientos, no es necesario seguir buscando.
-	                } else if (empleadosRequeridosCumplidos >= mejorContador && calificacion < mejorCalificacion) {
-	                    continue;  // No cumple con los requerimientos mínimos, pasamos a la siguiente combinación.
-	                }
-
-	                if (calificacion > mejorCalificacion) {
-	                    mejorEquipo = combinacion;
-	                    mejorContador = empleadosRequeridosCumplidos;
-	                    mejorCalificacion = calificacion;
-	                }
-	                // CONTEMPLAR EL CASO EN EL QUE NO HAY CONFLICTOS Y SE REQUIEREN MENOS EMPLEADOS DE UN ROL
-	                //DE LOS QUE HAY EN TOTAL
+	            if (calificacionEquipo > calificacionMejorEquipo) {
+	                mejorEquipo = equipo;
 	            }
+	            
 	        }
-	        
-	        System.out.println("Mejor equipo hasta el momento: " + mejorEquipo.toString());
 	    }
 
-	    System.out.println("Mejor equipo encontrado: " + mejorEquipo.toString());
 	    return mejorEquipo;
 	}
-
-	private static List<Empleado> filtrarEmpleadosNoRequeridos(List<Empleado> empleados, HashMap<Rol, Integer> rolesRequeridos) {
-	    List<Empleado> empleadosFiltrados = new ArrayList<>();
-
-	    for (Empleado empleado : empleados) {
-	        if (rolesRequeridos.containsKey(empleado.getRol())) {
-	            empleadosFiltrados.add(empleado);
-	        }
-	    }
-
-	    return empleadosFiltrados;
-	}
 	
-	public static int contarEmpleadosRequeridosCumplidos(HashMap<Rol, Integer> rolesRequeridos, List<Empleado> equipo) {
-	    HashMap<Rol, Integer> contadorRoles = new HashMap<>();
+	//DUDA CONSIGNA - SI HAY DOS PERSONAS EN CONFLICTO SE DEBE EXCLUIR SOLO 1 DE ELLAS DEL EQUIPO A FORMAR O AMBAS?
+	//ACTUALMENTE EL PROGRAMA VETA A AMBAS.
 
-	    for (Empleado empleado : equipo) {
-	        Rol rol = empleado.getRol();
-	        contadorRoles.put(rol, contadorRoles.getOrDefault(rol, 0) + 1);
-	    }
+	private static List<List<Empleado>> generarCombinaciones(List<Empleado> empleados, int index) {
+	    List<List<Empleado>> combinaciones = new ArrayList<>();
 
-	    int empleadosRequeridosCumplidos = 0;
+	    if (index == empleados.size()) {
+	        combinaciones.add(new ArrayList<>());
+	    } else {
+	        List<List<Empleado>> subCombinaciones = generarCombinaciones(empleados, index + 1);
 
-	    for (Map.Entry<Rol, Integer> entry : rolesRequeridos.entrySet()) {
-	        Rol rol = entry.getKey();
-	        int cantidadRequerida = entry.getValue();
-	        int cantidadActual = contadorRoles.getOrDefault(rol, 0);
+	        Empleado empleado = empleados.get(index);
 
-	        if (cantidadActual >= cantidadRequerida) {
-	            empleadosRequeridosCumplidos += cantidadRequerida;
+	        for (List<Empleado> subCombinacion : subCombinaciones) {
+	            combinaciones.add(subCombinacion); // Combinación sin el empleado actual
+
+	            List<Empleado> nuevaCombinacion = new ArrayList<>(subCombinacion);
+	            nuevaCombinacion.add(empleado);
+	            combinaciones.add(nuevaCombinacion); // Combinación con el empleado actual
 	        }
 	    }
 
-	    return empleadosRequeridosCumplidos;
+	    return combinaciones;
 	}
 
-	public static double obtenerCalificacionTotal(List<Empleado> equipo) {
-	    double calificacionTotal = 0.0;
+    private static boolean cumpleRequerimientos(List<Empleado> equipo, Map<Rol, Integer> requerimientos) {
+        Map<Rol, Integer> contadorRoles = new HashMap<>();
 
-	    for (Empleado empleado : equipo) {
-	        calificacionTotal += empleado.getCalificacion();
-	    }
+        for (Empleado empleado : equipo) {
+            Rol rol = empleado.getRol();
+            int count = contadorRoles.getOrDefault(rol, 0) + 1;
+            contadorRoles.put(rol, count);
+        }
 
-	    return calificacionTotal;
-	}
+        for (Map.Entry<Rol, Integer> requerimiento : requerimientos.entrySet()) {
+            Rol rol = requerimiento.getKey();
+            int requeridos = requerimiento.getValue();
+            int disponibles = contadorRoles.getOrDefault(rol, 0);
 
-	public static List<List<Empleado>> generarCombinaciones(List<Empleado> empleados, int r) {
-		if(empleados == null || empleados.isEmpty() || r > empleados.size())
-			throw new RuntimeException("No se pueden generar las combinaciones");
-		
-	    List<List<Empleado>> result = new ArrayList<>();
-	    generarCombinacionesRecursivo(empleados, r, 0, new ArrayList<>(), result);
-	    return result;
-	}
+            if (disponibles != requeridos) {
+                return false;
+            }
+        }
 
-	public static void generarCombinacionesRecursivo(List<Empleado> empleados, int r, int index, List<Empleado> combinacionActual, List<List<Empleado>> result) {
-	    if (combinacionActual.size() == r) {
-	        result.add(new ArrayList<>(combinacionActual));
-	        return;
-	    }
+        return true;
+    }
 
-	    for (int i = index; i < empleados.size(); i++) {
-	        combinacionActual.add(empleados.get(i));
-	        generarCombinacionesRecursivo(empleados, r, i + 1, combinacionActual, result);
-	        combinacionActual.remove(combinacionActual.size() - 1);
-	    }
-	}
+    private static boolean noEsIncompatible(List<Empleado> equipo, List<List<Empleado>> incompatibilidades) {
+        for (List<Empleado> incompatibilidad : incompatibilidades) {
+            for (Empleado empleado : incompatibilidad) {
+                if (equipo.contains(empleado)) {
+                    return false;
+                }
+            }
+        }
 
-//	public static boolean verificarRequerimientos(HashMap<Rol, Integer> rolesRequeridos, List<Empleado> equipo) {
-//	    HashMap<Rol, Integer> contadorRoles = new HashMap<>();
-//
-//	    for (Empleado empleado : equipo) {
-//	        Rol rol = empleado.getRol();
-//	        contadorRoles.put(rol, contadorRoles.getOrDefault(rol, 0) + 1);
-//	    }
-//
-//	    for (Map.Entry<Rol, Integer> entry : rolesRequeridos.entrySet()) {
-//	        Rol rol = entry.getKey();
-//	        int cantidadRequerida = entry.getValue();
-//	        int cantidadActual = contadorRoles.getOrDefault(rol, 0);
-//	        
-//	        if (cantidadActual < cantidadRequerida) {
-//	            return false;
-//	        }
-//	    }
-//
-//	    return true;
-//	}
+        return true;
+    }
 
-	public static boolean tieneConflictos(List<Empleado> equipo, List<List<Empleado>> incompatibles) {
-	    for (List<Empleado> incompatibilidad : incompatibles) {
-	        Empleado empleado1 = incompatibilidad.get(0);
-	        Empleado empleado2 = incompatibilidad.get(1);
-
-	        if (equipo.contains(empleado1) && equipo.contains(empleado2)) {
-	            return true;
-	        }
-	    }
-
-	    return false;
-	}
-	
-	//////////////////////////////////////////////////////
+    private static int calcularCalificacionTotal(List<Empleado> equipo) {
+        int calificacionTotal = 0;
+        for (Empleado empleado : equipo) {
+            calificacionTotal += empleado.getCalificacion();
+        }
+        return calificacionTotal;
+    }
 	
 	private static boolean verificarRequerimiento(HashMap<Rol, Integer> requerimientos, Empleado e) {
 //		if(requerimientos == null || requerimientos.isEmpty())
@@ -211,7 +156,7 @@ public class Equipo {
 	// Elimina al primer empleado que encuentra con ese nombre.
 	//Si no encuentra arroja excepcion.
 	public void quitarEmpleado(String nombre) {
-		Empleado e = buscarPorNombre(nombre);
+		Empleado e = buscarPorNombre(nombre.toUpperCase());
 		
 		if (e.equals(null)) throw new RuntimeException("Empleado no encontrado");
 		
