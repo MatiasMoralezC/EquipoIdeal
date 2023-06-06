@@ -54,7 +54,6 @@ public class Controlador {
 	}
 
 	public List<Empleado> verEmpleados() {
-		// TODO Auto-generated method stub
 		return e.verEmpleados();
 	}
 
@@ -62,7 +61,7 @@ public class Controlador {
 		return this.requerimientos;
 	}
 
-	public void quitarEmpleado() { // deberia ser boolean¿?
+	public void quitarEmpleado() {
 		Scanner lector = new Scanner(System.in);
 		System.out.println("Ingrese el nombre: ");
 		String nombre = lector.next();
@@ -74,7 +73,6 @@ public class Controlador {
 	}
 
 	public List<List<Empleado>> obtenerIncompatibilidades() {
-		// esta bien que devuelva la lista¿¿??
 		return e.getIncompatibilidades();
 	}
 
@@ -91,20 +89,18 @@ public class Controlador {
 
 	public void eliminarIncompatibilidad() {
 		Scanner lector = new Scanner(System.in);
-		System.out.println("Dime el indice de la incompatibilidad a quitar: ");
+		System.out.println("Ingrese el indice de la incompatibilidad a quitar (iniciando en 1): ");
 		int indexIncompat = lector.nextInt();
 
-		e.quitarIncompatibilidad(indexIncompat - 1); // ojo con esto
+		e.quitarIncompatibilidad(indexIncompat - 1);
 	}
 
 	public void agregarRequerimiento() {
 		Scanner lector = new Scanner(System.in);
 		Rol rol = conseguirRol(lector);
 		if (requerimientos.containsKey(rol)) {
-			// ------------------------ esta bien o aumentamos el value?
 			throw new RuntimeException("El requerimiento que quieres ingresar ya existe");
 		}
-		// añadir requerimiento
 
 		System.out.println("Ingrese su cantidad para el rol " + rol.toString() + ": ");
 		int cant = lector.nextInt();
@@ -132,7 +128,6 @@ public class Controlador {
 		} else if (cantidadDelRol > cant) {
 			requerimientos.remove(rol);
 			requerimientos.put(rol, cantidadDelRol - cant);
-			// requerimientos.put(rol, requerimientos.get(rol) + 1);
 			System.out.println("Se ha/n quitado " + cant + " " + rol.toString() + "/s");
 		} else {
 			requerimientos.remove(rol);
@@ -143,7 +138,6 @@ public class Controlador {
 
 	public int cantidadRol(Rol rol) {
 		if (!requerimientos.containsKey(rol)) {
-			// ------------------------ esta bien o aumentamos el value?
 			throw new RuntimeException("El requerimiento que intenta quitar no existe");
 		}
 

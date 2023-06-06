@@ -13,7 +13,6 @@ public class Equipo {
 	List<List<Empleado>> incompatibles = new ArrayList<>();
 	
 	public void cargarEmpleado(Empleado e) {
-		// si el empleado ya existe, se debe lanzar una excepcion
 		empleados.add(e);
 	}
 	
@@ -24,7 +23,6 @@ public class Equipo {
 		if(!verificarEmpleado(nombre1) || !verificarEmpleado(nombre2))
 			throw new RuntimeException("alguno de los nombres ingresados no es valido");
 		
-		// chequear
 		List<Empleado> par = empleados.stream()
 		.filter(p -> p.getNombre().equals(nombre1) || p.getNombre().equals(nombre2))
 		.toList();
@@ -33,7 +31,6 @@ public class Equipo {
 	}
 	
 	private boolean verificarEmpleado(String nombre) {
-		// chequear
 		return empleados.stream()
 				.anyMatch(p -> p.getNombre().equals(nombre));
 	}
@@ -48,15 +45,11 @@ public class Equipo {
 	    verificarEntrada(empleados, requerimientos);
 		
 		List<Empleado> mejorEquipo = new ArrayList<>();
-
-	    // Generar todas las combinaciones posibles de empleados
 	    List<List<Empleado>> combinaciones = generarCombinaciones(empleados, 0);
 
-	    // Recorrer todas las combinaciones
 	    for (List<Empleado> equipo : combinaciones) {
 	    	System.out.println("Mejor equipo hasta ahora: "+mejorEquipo.toString());
 	        if (cumpleRequerimientos(equipo, requerimientos) && esCompatible(equipo, incompatibilidades)) {
-	            // El equipo cumple con los requerimientos y no tiene incompatibilidades
 	            int calificacionEquipo = calcularCalificacionTotal(equipo);
 	            int calificacionMejorEquipo = calcularCalificacionTotal(mejorEquipo);
 
@@ -70,7 +63,6 @@ public class Equipo {
 	    return mejorEquipo;
 	}
 
-	// Verifica si hay empleados y requerimientos, sino arroja excepcion.
 	private void verificarEntrada(List<Empleado> empleados, Map<Rol, Integer> requerimientos) {
 		if (empleados.isEmpty() || requerimientos.isEmpty()) throw new  RuntimeException("Falta entrada de datos");
 	}
@@ -93,14 +85,13 @@ public class Equipo {
 
 	            List<Empleado> nuevaCombinacion = new ArrayList<>(subCombinacion);
 	            nuevaCombinacion.add(empleado);
-	            combinaciones.add(nuevaCombinacion); // Combinación con el empleado actual
+	            combinaciones.add(nuevaCombinacion);
 	        }
 	    }
 
 	    return combinaciones;
 	}
 
-	// Recorre el equipo y verifica si tiene integrantes para cumplir los requerimientos
     public boolean cumpleRequerimientos(List<Empleado> equipo, Map<Rol, Integer> requerimientos) {
         Map<Rol, Integer> contadorRoles = new HashMap<>();
 
@@ -144,13 +135,6 @@ public class Equipo {
         return calificacionTotal;
     }
 	
-	private boolean verificarRequerimiento(HashMap<Rol, Integer> requerimientos, Empleado e) {
-//		if(requerimientos == null || requerimientos.isEmpty())
-//			throw new RuntimeException("los requerimientos no son validos");
-		return requerimientos.containsKey( e.getRol() );
-	}
-	
-	// Uso streams para buscar a un empleado en base a su nombre
 	public Empleado buscarPorNombre(String nombre) {
 		return empleados.stream()
 				.filter(empleado -> empleado.getNombre().equals(nombre))
@@ -162,8 +146,6 @@ public class Equipo {
 		return this.empleados;
 	}
 
-	// Elimina al primer empleado que encuentra con ese nombre.
-	//Si no encuentra arroja excepcion.
 	public void quitarEmpleado(String nombre) {
 		Empleado e = buscarPorNombre(nombre.toUpperCase());
 		

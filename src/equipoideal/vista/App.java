@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 import equipoideal.controlador.Controlador;
 import equipoideal.modelo.Empleado;
@@ -44,6 +45,7 @@ public class App {
 				try {
 					App window = new App();
 					window.frmTrabajoPracticoIii.setVisible(true);
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

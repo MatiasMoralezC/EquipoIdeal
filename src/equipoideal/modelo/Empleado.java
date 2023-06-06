@@ -17,7 +17,6 @@ public class Empleado {
 	}
 
 	public Rol getRol() {
-		// TODO Auto-generated method stub
 		return this.rol;
 	}
 	
