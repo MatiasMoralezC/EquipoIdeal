@@ -16,9 +16,9 @@ public class EquipoTest {
 	/*
 	 * void cargarEmpleado(Empleado e) --> hace falta?
 	 * 
-	 * void cargarIncompatibles(String nombre1, String nombre2)
+	 * void cargarIncompatibles(String nombre1, String nombre2) -- listo
 	 * 
-	 * boolean verificarEmpleado(String nombre)
+	 * boolean verificarEmpleado(String nombre) -- private -- hace falta¿? el de arriba lo controla
 	 * 
 	 * quitarIncompatibilidad(int index)
 	 * 
@@ -81,12 +81,44 @@ public class EquipoTest {
 		String nombre2 = "picasso";
 		
 		equipo.cargarIncompatibles(nombre1, nombre2);
-		System.out.println( equipo.getIncompatibilidades().get(0).get(1) );
 		String expect1 = "\nARQUITECTO -- Nombre: pipo, Calificacion: 4";
 		String expect2 = "\nPROGRAMADOR -- Nombre: picasso, Calificacion: 3";
 		
 		assertTrue( expect1.equals( equipo.getIncompatibilidades().get(0).get(0).toString() ));
 		assertTrue( expect2.equals( equipo.getIncompatibilidades().get(0).get(1).toString() ));
+	}
+	
+
+	// quitarIncompatibilidad(int index)
+	@Test
+	public void quitarIncompatibilidadCorrecto() {
+		String nombre1 = "pipo";
+		String nombre2 = "picasso";
+		
+		equipo.cargarIncompatibles(nombre1, nombre2);
+		equipo.quitarIncompatibilidad(0);
+		
+		assertTrue( equipo.getIncompatibilidades().isEmpty() );
+	}
+
+	@Test(expected = Exception.class)
+	public void quitarIncompatibilidadIndexNegativo() {
+		String nombre1 = "pipo";
+		String nombre2 = "picasso";
+		
+		equipo.cargarIncompatibles(nombre1, nombre2);
+		equipo.quitarIncompatibilidad(-10);
+		
+		assertTrue( equipo.getIncompatibilidades().isEmpty() );
+	}
+
+	@Test(expected = Exception.class)
+	public void quitarIncompatibilidadIndexNoValido() {
+		String nombre1 = "pipo";
+		String nombre2 = "picasso";
+		
+		equipo.cargarIncompatibles(nombre1, nombre2);
+		equipo.quitarIncompatibilidad(10);
 	}
 	
 }
