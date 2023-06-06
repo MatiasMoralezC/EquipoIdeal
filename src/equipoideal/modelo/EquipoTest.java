@@ -126,49 +126,56 @@ public class EquipoTest {
 	 * 		HashMap<Rol, Integer> rolesRequeridos)
 	 */
 	
+	
+	
+
+	// double obtenerCalificacionTotal(List<Empleado> equipo)
+	@Test
+	public void obtenerCalificacionTotalCorrecto(){
+		List<Empleado> aux = new ArrayList<Empleado>();
+		aux.add( new Empleado("paula", Rol.LIDER_DE_PROYECTO, 5) );
+		aux.add( new Empleado("pilar", Rol.ARQUITECTO, 5) );
+		
+		assertTrue( 10.0 == equipo.obtenerCalificacionTotal(aux) );
+		
+	}
+	
+	@Test
+	public void obtenerCalificacionTotalVacio(){
+		List<Empleado> aux = new ArrayList<Empleado>();
+		assertTrue( 0.0 == equipo.obtenerCalificacionTotal(aux) );
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// Empleado buscarPorNombre(String nombre)
-	@Test
-	public void buscarPorNombreIncorrecto() {
-		assertTrue( equipo.buscarPorNombre("pepe") == null );
-	}
-	
-	@Test
-	public void buscarPorNombreCorrecto() {
-		String expect = "\nARQUITECTO -- Nombre: pipo, Calificacion: 4";
-		assertTrue( expect.equals( equipo.buscarPorNombre("pipo").toString() ) );
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		@Test
+		public void buscarPorNombreIncorrecto() {
+			assertTrue( equipo.buscarPorNombre("pepe") == null );
+		}
+		
+		@Test
+		public void buscarPorNombreCorrecto() {
+			String expect = "\nARQUITECTO -- Nombre: pipo, Calificacion: 4";
+			assertTrue( expect.equals( equipo.buscarPorNombre("pipo").toString() ) );
+		}
 	
 }
