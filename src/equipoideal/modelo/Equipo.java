@@ -196,7 +196,7 @@ public class Equipo {
 	// Uso streams para buscar a un empleado en base a su nombre
 	public Empleado buscarPorNombre(String nombre) {
 		Empleado e = empleados.stream()
-				.filter(empleado -> empleado.getNombre().equals(nombre.toUpperCase()))
+				.filter(empleado -> empleado.getNombre().equals(nombre))
 				.limit(1)
 				.findFirst().orElse(null);
 		

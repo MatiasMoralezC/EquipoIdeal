@@ -20,7 +20,7 @@ public class EquipoTest {
 	 * 
 	 * boolean verificarEmpleado(String nombre) -- private -- hace falta¿? el de arriba lo controla
 	 * 
-	 * quitarIncompatibilidad(int index)
+	 * quitarIncompatibilidad(int index) -- listo
 	 * 
 	 * List<Empleado> encontrarEquipoSinConflictos(List<Empleado> empleados,
 	 *  	List<List<Empleado>> incompatibles, HashMap<Rol, Integer> rolesRequeridos) -- luego
@@ -58,7 +58,7 @@ public class EquipoTest {
 		}
 	}
 	
-	// cargarIncompatibles()
+	// cargarIncompatibles
 	@Test(expected = Exception.class)
 	public void cargarIncompatiblesNombresIguales() {
 		String nombre1="pepe";
@@ -89,7 +89,7 @@ public class EquipoTest {
 	}
 	
 
-	// quitarIncompatibilidad(int index)
+	// quitarIncompatibilidad
 	@Test
 	public void quitarIncompatibilidadCorrecto() {
 		String nombre1 = "pipo";
@@ -120,5 +120,55 @@ public class EquipoTest {
 		equipo.cargarIncompatibles(nombre1, nombre2);
 		equipo.quitarIncompatibilidad(10);
 	}
+	
+	/*
+	 * List<Empleado> filtrarEmpleadosNoRequeridos(List<Empleado> empleados,
+	 * 		HashMap<Rol, Integer> rolesRequeridos)
+	 */
+	
+	// Empleado buscarPorNombre(String nombre)
+	@Test
+	public void buscarPorNombreIncorrecto() {
+		assertTrue( equipo.buscarPorNombre("pepe") == null );
+	}
+	
+	@Test
+	public void buscarPorNombreCorrecto() {
+		String expect = "\nARQUITECTO -- Nombre: pipo, Calificacion: 4";
+		assertTrue( expect.equals( equipo.buscarPorNombre("pipo").toString() ) );
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
