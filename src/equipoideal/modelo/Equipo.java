@@ -44,8 +44,10 @@ public class Equipo {
 		incompatibles.remove(index);
 	}
 		
-	public static List<Empleado> encontrarEquipoSinConflictos(List<Empleado> empleados, List<List<Empleado>> incompatibilidades, Map<Rol, Integer> requerimientos) {
-	    List<Empleado> mejorEquipo = new ArrayList<>();
+	public List<Empleado> encontrarEquipoSinConflictos(List<Empleado> empleados, List<List<Empleado>> incompatibilidades, Map<Rol, Integer> requerimientos) {
+	    verificarEntrada(empleados, requerimientos);
+		
+		List<Empleado> mejorEquipo = new ArrayList<>();
 
 	    // Generar todas las combinaciones posibles de empleados
 	    List<List<Empleado>> combinaciones = generarCombinaciones(empleados, 0);
@@ -53,7 +55,7 @@ public class Equipo {
 	    // Recorrer todas las combinaciones
 	    for (List<Empleado> equipo : combinaciones) {
 	    	System.out.println("Mejor equipo hasta ahora: "+mejorEquipo.toString());
-	        if (cumpleRequerimientos(equipo, requerimientos) && noEsIncompatible(equipo, incompatibilidades)) {
+	        if (cumpleRequerimientos(equipo, requerimientos) && esCompatible(equipo, incompatibilidades)) {
 	            // El equipo cumple con los requerimientos y no tiene incompatibilidades
 	            int calificacionEquipo = calcularCalificacionTotal(equipo);
 	            int calificacionMejorEquipo = calcularCalificacionTotal(mejorEquipo);
@@ -67,11 +69,16 @@ public class Equipo {
 
 	    return mejorEquipo;
 	}
+
+	// Verifica si hay empleados y requerimientos, sino arroja excepcion.
+	private void verificarEntrada(List<Empleado> empleados, Map<Rol, Integer> requerimientos) {
+		if (empleados.isEmpty() || requerimientos.isEmpty()) throw new  RuntimeException("Falta entrada de datos");
+	}
 	
 	//DUDA CONSIGNA - SI HAY DOS PERSONAS EN CONFLICTO SE DEBE EXCLUIR SOLO 1 DE ELLAS DEL EQUIPO A FORMAR O AMBAS?
 	//ACTUALMENTE EL PROGRAMA VETA A AMBAS.
 
-	private static List<List<Empleado>> generarCombinaciones(List<Empleado> empleados, int index) {
+	public List<List<Empleado>> generarCombinaciones(List<Empleado> empleados, int index) {
 	    List<List<Empleado>> combinaciones = new ArrayList<>();
 
 	    if (index == empleados.size()) {
@@ -93,7 +100,8 @@ public class Equipo {
 	    return combinaciones;
 	}
 
-    private static boolean cumpleRequerimientos(List<Empleado> equipo, Map<Rol, Integer> requerimientos) {
+	// Recorre el equipo y verifica si tiene integrantes para cumplir los requerimientos
+    public boolean cumpleRequerimientos(List<Empleado> equipo, Map<Rol, Integer> requerimientos) {
         Map<Rol, Integer> contadorRoles = new HashMap<>();
 
         for (Empleado empleado : equipo) {
@@ -115,7 +123,8 @@ public class Equipo {
         return true;
     }
 
-    private static boolean noEsIncompatible(List<Empleado> equipo, List<List<Empleado>> incompatibilidades) {
+    
+    public boolean esCompatible(List<Empleado> equipo, List<List<Empleado>> incompatibilidades) {
         for (List<Empleado> incompatibilidad : incompatibilidades) {
             for (Empleado empleado : incompatibilidad) {
                 if (equipo.contains(empleado)) {
@@ -127,7 +136,7 @@ public class Equipo {
         return true;
     }
 
-    private static int calcularCalificacionTotal(List<Empleado> equipo) {
+    public int calcularCalificacionTotal(List<Empleado> equipo) {
         int calificacionTotal = 0;
         for (Empleado empleado : equipo) {
             calificacionTotal += empleado.getCalificacion();
@@ -135,7 +144,7 @@ public class Equipo {
         return calificacionTotal;
     }
 	
-	private static boolean verificarRequerimiento(HashMap<Rol, Integer> requerimientos, Empleado e) {
+	private boolean verificarRequerimiento(HashMap<Rol, Integer> requerimientos, Empleado e) {
 //		if(requerimientos == null || requerimientos.isEmpty())
 //			throw new RuntimeException("los requerimientos no son validos");
 		return requerimientos.containsKey( e.getRol() );

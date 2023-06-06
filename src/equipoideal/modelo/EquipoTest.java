@@ -136,14 +136,14 @@ public class EquipoTest {
 		aux.add( new Empleado("paula", Rol.LIDER_DE_PROYECTO, 5) );
 		aux.add( new Empleado("pilar", Rol.ARQUITECTO, 5) );
 		
-		assertTrue( 10.0 == equipo.obtenerCalificacionTotal(aux) );
+		assertTrue( 10.0 == equipo.calcularCalificacionTotal(aux) );
 		
 	}
 	
 	@Test
 	public void obtenerCalificacionTotalVacio(){
 		List<Empleado> aux = new ArrayList<Empleado>();
-		assertTrue( 0.0 == equipo.obtenerCalificacionTotal(aux) );
+		assertTrue( 0.0 == equipo.calcularCalificacionTotal(aux) );
 		
 	}
 	
