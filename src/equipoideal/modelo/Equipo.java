@@ -13,7 +13,15 @@ public class Equipo {
 	List<List<Empleado>> incompatibles = new ArrayList<>();
 	
 	public void cargarEmpleado(Empleado e) {
-		empleados.add(e);
+		boolean aux = empleados.stream()
+				.filter(empleado -> empleado.getNombre().equals(e.getNombre()))
+				.findAny() != null;
+		
+		if(!aux) {
+			throw new RuntimeException("no se puede cargar el empleado");
+		} else {
+			empleados.add(e);
+		}
 	}
 	
 	public void cargarIncompatibles(String nombre1, String nombre2) {
