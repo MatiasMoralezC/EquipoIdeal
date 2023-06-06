@@ -208,6 +208,12 @@ public class App {
 		});
 		btnFormarEquipo.setBounds(153, 378, 124, 23);
 		frmTrabajoPracticoIii.getContentPane().add(btnFormarEquipo);
+		
+		JLabel lblNewLabel_1 = new JLabel("Aviso: Una vez es formado el equipo, se recomienda cerrar el programa para evitar posibles conflictos.");
+		lblNewLabel_1.setForeground(new Color(255, 0, 0));
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel_1.setBounds(10, 466, 663, 54);
+		frmTrabajoPracticoIii.getContentPane().add(lblNewLabel_1);
 	}
 
 	private void agregarEmpleado() { // --> deberia devolver un boolean¿? por si no se puede, mostrar un aviso
